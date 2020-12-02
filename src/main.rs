@@ -1,3 +1,9 @@
+// See days/2.rs.
+#![feature(str_split_once)]
+
+#[macro_use]
+extern crate lazy_static;
+
 mod aoc_error;
 mod days;
 
