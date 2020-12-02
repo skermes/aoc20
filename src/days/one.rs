@@ -2,7 +2,7 @@ use std::collections::HashSet;
 use std::num::ParseIntError;
 use crate::aoc_error::AocError;
 
-pub const NAME: &'static str = "Report Repair";
+pub const NAME: &str = "Report Repair";
 
 pub fn part_one(input: &str) -> Result<String, AocError> {
     let nums: HashSet<usize> = input

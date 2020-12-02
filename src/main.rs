@@ -74,22 +74,15 @@ fn main() {
     let mut days: Vec<Day> = Vec::new();
     if args.len() < 2 {
         for i in 1..26 {
-            let day = get_day(&format!("{}", i));
-            if day.is_some() {
-                // Unwrap here won't panic because it's guarded by is_some.
-                days.push(day.unwrap());
+            if let Some(day) = get_day(&i.to_string()) {
+                days.push(day);
             }
         }
+    } else if let Some(day) = get_day(&args[1]) {
+        days.push(day);
     } else {
-        let day = get_day(&args[1]);
-
-        if day.is_none() {
-            println!("No implementation for day {}.", &args[1]);
-            return;
-        }
-
-        // Unwrap here won't panic because we early return the None case above.
-        days.push(day.unwrap());
+        println!("No implementation for day {}.", &args[1]);
+        return;
     }
 
     let mut total_problem_duration = Duration::new(0, 0);

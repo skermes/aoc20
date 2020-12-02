@@ -2,7 +2,7 @@ use std::str::FromStr;
 use regex::Regex;
 use crate::aoc_error::AocError;
 
-pub const NAME: &'static str = "Password Philosophy";
+pub const NAME: &str = "Password Philosophy";
 
 struct Rule {
     letter: char,
@@ -47,11 +47,7 @@ impl FromStr for Rule {
             // there a char there to iterate over.
             .unwrap();
 
-        Ok(Rule {
-            letter: letter,
-            x: x,
-            y: y
-        })
+        Ok(Rule { letter, x, y })
     }
 }
 
