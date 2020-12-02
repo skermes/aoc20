@@ -112,7 +112,7 @@ fn main() {
 
     let total_duration = start.elapsed();
     println!(
-        "\n Time - total: {}, problem: {}",
+        "\nTime - total: {}, problem: {}",
         format_duration(total_duration),
         format_duration(total_problem_duration)
     );
