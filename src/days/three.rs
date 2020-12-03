@@ -1,56 +1,43 @@
-use std::str::FromStr;
 use crate::aoc_error::AocError;
 
 pub const NAME: &str = "Toboggan Trajectory";
 
-struct TreeMap {
-    trees: Vec<Vec<bool>>
+struct TreeMap<'a> {
+    trees: &'a str,
+    height: usize,
+    tile_width: usize
 }
 
-impl FromStr for TreeMap {
-    type Err = AocError;
+impl TreeMap<'_> {
+    fn new(text: &str) -> TreeMap {
+        let height = text.lines().count();
+        // Input is known to be rectangular so we can get away with only
+        // counting one line.
+        let width = text.chars().take_while(|c| c != &'\n').count();
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Ok(TreeMap {
-            trees: s
-                .lines()
-                .map(|line| line
-                    .chars()
-                    .map(|c| match c {
-                        '#' => Ok(true),
-                        '.' => Ok(false),
-                        _ => Err(AocError::Misc("Bad tree char".to_string()))
-                    })
-                    .collect::<Result<Vec<bool>, AocError>>()
-                )
-                .collect::<Result<Vec<Vec<bool>>, AocError>>()?
-        })
-    }
-}
-
-impl TreeMap {
-    fn height(&self) -> usize {
-        self.trees.len()
-    }
-
-    fn tile_width(&self) -> usize {
-        // The input guarantees that the map is rectangular
-        self.trees[0].len()
+        TreeMap {
+            trees: text,
+            height: height,
+            tile_width: width
+        }
     }
 
     fn tree_at(&self, row: usize, col: usize) -> bool {
-        if row >= self.height() {
+        if row >= self.height {
             // It's convenient for one of the part two seconds to go down
             // past the end of the map.
             return false
         }
 
-        let col = col % self.tile_width();
-        self.trees[row][col]
+        let col = col % self.tile_width;
+
+        // +1 here to account for newline chars
+        let i = row * (self.tile_width + 1) + col;
+        &self.trees[i..i + 1] == "#"
     }
 
     fn trees_at_slope(&self, drow: usize, dcol: usize) -> usize {
-        (0..self.height())
+        (0..self.height)
             .map(|i| (i * drow, i * dcol))
             .filter(|(row, col)| self.tree_at(*row, *col))
             .count()
@@ -58,13 +45,13 @@ impl TreeMap {
 }
 
 pub fn part_one(input: &str) -> Result<String, AocError> {
-    let tree_map: TreeMap = input.parse()?;
+    let tree_map = TreeMap::new(input);
 
     Ok(tree_map.trees_at_slope(1, 3).to_string())
 }
 
 pub fn part_two(input: &str) -> Result<String, AocError> {
-    let tree_map: TreeMap = input.parse()?;
+    let tree_map = TreeMap::new(input);
 
     let product =
         tree_map.trees_at_slope(1, 1) *
