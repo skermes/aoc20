@@ -26,16 +26,14 @@ fn format_result<V, E>(result: &Result<V, E>) -> String
 }
 
 fn format_duration(duration: Duration) -> String {
-    let millis = duration.as_millis();
+    let micros = duration.as_micros();
 
-    if millis == 0 {
-        format!("{}\u{03BC}s", duration.as_micros())
-    } else if millis > 1000 {
-        let secs = duration.as_secs() as f64;
-        let millis = millis as f64;
-        format!("{:.1}s", secs + (millis / 1000.))
+    if micros < 1_000 {
+        format!("{}\u{03BC}s", micros)
+    } else if micros < 1_000_000 {
+        format!("{:.1}ms", (micros as f64) / 1_000.)
     } else {
-        format!("{}ms", millis)
+        format!("{:.1}s", (micros as f64) / 1_000_000.)
     }
 }
 
