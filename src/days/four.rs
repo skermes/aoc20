@@ -42,7 +42,7 @@ impl Passport<'_> {
             match value.parse::<u16>() {
                 Err(_) => { return false; },
                 Ok(year) => {
-                    if year < 1920 || year > 2002 {
+                    if !(1920..=2002).contains(&year) {
                         return false;
                     }
                 }
@@ -56,7 +56,7 @@ impl Passport<'_> {
             match value.parse::<u16>() {
                 Err(_) => { return false; },
                 Ok(year) => {
-                    if year < 2010 || year > 2020 {
+                    if !(2010..=2020).contains(&year) {
                         return false;
                     }
                 }
@@ -70,7 +70,7 @@ impl Passport<'_> {
             match value.parse::<u16>() {
                 Err(_) => { return false; },
                 Ok(year) => {
-                    if year < 2020 || year > 2030 {
+                    if !(2020..=2030).contains(&year) {
                         return false;
                     }
                 }
@@ -89,9 +89,8 @@ impl Passport<'_> {
                 Ok(height) => *height
             };
 
-            if unit == "cm" && (height < 150 || height > 193) {
-                return false;
-            } else if unit == "in" && (height < 59 || height > 76) {
+            if unit == "cm" && !(150..=193).contains(&height) ||
+               unit == "in" && !(59..=76).contains(&height) {
                 return false;
             }
         } else {
@@ -141,7 +140,7 @@ impl Passport<'_> {
 
         // cid (Country ID) - ignored, missing or not.
 
-        return true;
+        true
     }
 }
 

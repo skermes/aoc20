@@ -17,7 +17,7 @@ impl TreeMap<'_> {
 
         TreeMap {
             trees: text,
-            height: height,
+            height,
             tile_width: width
         }
     }
