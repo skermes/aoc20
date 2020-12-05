@@ -66,7 +66,7 @@ pub fn part_two(input: &str) -> Result<String, AocError> {
         .map(|pass| pass.seat_id())
         .collect();
 
-    seat_ids.sort();
+    seat_ids.sort_unstable();
 
     seat_ids
         .iter()
