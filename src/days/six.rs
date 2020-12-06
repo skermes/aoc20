@@ -14,25 +14,15 @@ fn answer_bits(s: &str) -> u32 {
     answers
 }
 
-fn bit_count(mut n: u32) -> u32 {
-    let mut bits = 0;
-    loop {
-        if n == 0 { break; }
-        bits += 1;
-        n &= n - 1;
-    }
-    bits
-}
-
 pub fn part_one(input: &str) -> Result<String, AocError> {
     let answer_count_sum: u32 = input
         .split("\n\n")
         .map(|group| {
-            let group_answers = group
+            group
                 .lines()
                 .map(|person| answer_bits(person))
-                .fold(0, |acc, x| acc | x);
-            bit_count(group_answers)
+                .fold(0, |acc, x| acc | x)
+                .count_ones()
         })
         .sum();
 
@@ -43,11 +33,11 @@ pub fn part_two(input: &str) -> Result<String, AocError> {
     let answer_count_sum: u32 = input
         .split("\n\n")
         .map(|group| {
-            let group_answers = group
+            group
                 .lines()
                 .map(|person| answer_bits(person))
-                .fold(0xFFFFFFFF, |acc, x| acc & x);
-            bit_count(group_answers)
+                .fold(0xFFFFFFFF, |acc, x| acc & x)
+                .count_ones()
         })
         .sum();
 
