@@ -1,21 +1,38 @@
-use std::collections::HashSet;
 use crate::aoc_error::AocError;
 
 pub const NAME: &str = "Custom Customs";
 
+fn letter2bit(c: &char) -> u32 {
+    1 << (*c as u8 - 97)
+}
+
+fn answer_bits(s: &str) -> u32 {
+    let mut answers = 0u32;
+    for c in s.chars() {
+        answers |= letter2bit(&c);
+    }
+    answers
+}
+
+fn bit_count(mut n: u32) -> u32 {
+    let mut bits = 0;
+    loop {
+        if n == 0 { break; }
+        bits += 1;
+        n &= n - 1;
+    }
+    bits
+}
+
 pub fn part_one(input: &str) -> Result<String, AocError> {
-    let answer_count_sum: usize = input
+    let answer_count_sum: u32 = input
         .split("\n\n")
-        .map(|s| {
-            let mut answers = HashSet::new();
-            for c in s.chars() {
-                answers.insert(c);
-            }
-            // Some groups will have multiple lines, which will make us insert
-            // a newline in the loop above. Some groups won't. Always adding a
-            // newline lets us skip an if-clause.
-            answers.insert('\n');
-            answers.len() - 1
+        .map(|group| {
+            let group_answers = group
+                .lines()
+                .map(|person| answer_bits(person))
+                .fold(0, |acc, x| acc | x);
+            bit_count(group_answers)
         })
         .sum();
 
@@ -23,19 +40,14 @@ pub fn part_one(input: &str) -> Result<String, AocError> {
 }
 
 pub fn part_two(input: &str) -> Result<String, AocError> {
-    let answer_count_sum: usize = input
+    let answer_count_sum: u32 = input
         .split("\n\n")
         .map(|group| {
-            group.lines()
-                .map(|person| person.chars().collect::<HashSet<char>>())
-                .fold_first(|acc, x| {
-                    acc
-                        .intersection(&x)
-                        .map(|&c| c)
-                        .collect()
-                })
-                .unwrap()
-                .len()
+            let group_answers = group
+                .lines()
+                .map(|person| answer_bits(person))
+                .fold(0xFFFFFFFF, |acc, x| acc & x);
+            bit_count(group_answers)
         })
         .sum();
 
