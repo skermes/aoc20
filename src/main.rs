@@ -1,5 +1,7 @@
 // See days/2.rs.
 #![feature(str_split_once)]
+// See days/6.rs.
+#![feature(iterator_fold_self)]
 
 #[macro_use]
 extern crate lazy_static;
