@@ -7,6 +7,7 @@ use std::num;
 pub enum AocError {
     Input(io::Error),
     BadInt(num::ParseIntError),
+    BadFloat(num::ParseFloatError),
     Misc(String)
 }
 
@@ -15,6 +16,7 @@ impl Display for AocError {
         match self {
             AocError::Input(error) => write!(f, "Error opening input file: {}", error),
             AocError::BadInt(error) => write!(f, "Bad integer: {}", error),
+            AocError::BadFloat(error) => write!(f, "Bad float: {}", error),
             AocError::Misc(message) => write!(f, "Error running problem: {}", message)
         }
     }
@@ -25,6 +27,7 @@ impl Error for AocError {
         match self {
             AocError::Input(error) => Some(error),
             AocError::BadInt(error) => Some(error),
+            AocError::BadFloat(error) => Some(error),
             _ => None
         }
     }
@@ -39,5 +42,11 @@ impl From<io::Error> for AocError {
 impl From<num::ParseIntError> for AocError {
     fn from(error: num::ParseIntError) -> Self {
         AocError::BadInt(error)
+    }
+}
+
+impl From<num::ParseFloatError> for AocError {
+    fn from(error: num::ParseFloatError) -> Self {
+        AocError::BadFloat(error)
     }
 }
