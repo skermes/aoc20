@@ -170,7 +170,6 @@ impl WaitingArea {
     fn flip(&mut self, row: isize, col: isize) {
         if row < 0 || col < 0 || row >= self.height as isize || col >= self.width as isize {
             println!("Trying to flip outside bounds, probably an error");
-            return;
         } else {
             let index = row as usize * self.width + col as usize;
             if self.tiles[index] == Occupied {
@@ -199,9 +198,8 @@ impl WaitingArea {
                 }
             }
 
-            if here == Empty && occupied == 0 {
-                to_flip.push((row, col));
-            } else if here == Occupied && occupied >= leave_threshold {
+            if here == Empty && occupied == 0 ||
+               here == Occupied && occupied >= leave_threshold{
                 to_flip.push((row, col));
             }
         }

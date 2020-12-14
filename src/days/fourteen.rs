@@ -116,7 +116,7 @@ impl Bitmask for MemBitmask {
 
         let mut base = x | self.ones;
         for bit in &self.floats {
-            base = base & (mask - (1 << bit));
+            base &= mask - (1 << bit);
         }
 
         MaskedAddresses {

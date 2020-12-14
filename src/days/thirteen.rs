@@ -4,8 +4,6 @@ use crate::aoc_error::AocError;
 
 pub const NAME: &str = "Shuttle Search";
 
-// TODO: Get rid of unwraps
-
 pub fn part_one(input: &str) -> Result<String, AocError> {
     let (now, shuttles) = input
         .split_once("\n")
@@ -22,7 +20,7 @@ pub fn part_one(input: &str) -> Result<String, AocError> {
     let (wait, first_shuttle) = shuttles
         .iter()
         .map(|s| {
-            let arrival = (&now / *s).ceil() * *s;
+            let arrival = (now / *s).ceil() * *s;
             let wait = arrival - now;
             (wait as usize, s)
         })
@@ -35,8 +33,7 @@ pub fn part_one(input: &str) -> Result<String, AocError> {
 pub fn part_two(input: &str) -> Result<String, AocError> {
     let shuttles = input
         .lines()
-        .skip(1)
-        .next()
+        .nth(1)
         .ok_or_else(|| AocError::Misc("No second line in input".to_string()))?;
 
     // Because of the error propagation I can't write this as just as
